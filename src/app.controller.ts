@@ -11,9 +11,9 @@ export class AppController {
   }
 
   @Post('password_recovery')
-  passwordRecovery(@Body() body): string {
-    if (recaptchaAdapter.isValid(body.recaptchToken)) {
-      return 'email was sent'
+  passwordRecovery(@Body() body: { email: string; recaptchaToken: string }): string {
+    if (recaptchaAdapter.isValid(body.recaptchaToken)) {
+      return `email was sent   ${JSON.stringify(body)}`
     } else {
       throw new BadRequestException('recaptcha error')
     }
