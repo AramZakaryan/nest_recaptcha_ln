@@ -11,9 +11,9 @@ export class AppController {
   }
 
   @Post('password_recovery')
-  passwordRecovery(@Body() body: { email: string; recaptchaToken: string }): string {
-    if (recaptchaAdapter.isValid(body.recaptchaToken)) {
-      return `email was sent   ${JSON.stringify(body)}`
+  async passwordRecovery(@Body() body: { email: string; recaptchaToken: string }) {
+    if (await recaptchaAdapter.isValid(body.recaptchaToken)) {
+      return `you are human`
     } else {
       throw new BadRequestException('recaptcha error')
     }
@@ -21,7 +21,18 @@ export class AppController {
 }
 
 const recaptchaAdapter = {
-  isValid(value) {
-    return true
+  async isValid(value: string): Promise<boolean> {
+    const result = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: '6LfF304qAAAAAK1UT-DV1yXpLEMT1RPZSDZK16nf',
+        response: value,
+      }),
+    }).then((res) => res.json())
+
+    console.log(result)
+
+    return result.success
   },
 }
