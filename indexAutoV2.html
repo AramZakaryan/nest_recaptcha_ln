@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Client Side</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+<h1>Client Side</h1>
+<form id="myForm">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+  <br/>
+  <div class="g-recaptcha" data-sitekey="6LcrDE8qAAAAADE-2JHMWTmwNq2x251jF-pK6gfx" data-callback="onReCaptchaSuccess"></div>
+  <br/>
+  <input type="submit" value="Submit">
+</form>
+
+<script>
+  // Prevent the form from being submitted the traditional way
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // This part is handled in the onReCaptchaSuccess callback below
+  });
+
+  // Define the callback function for successful reCAPTCHA
+  function onReCaptchaSuccess(token) {
+    const email = document.getElementById('email').value;
+
+    // Send the email and reCAPTCHA token to the backend
+    fetch('http://localhost:3000/password_recovery_v2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        recaptchaToken: token
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        // Handle success response
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // Handle error response
+      });
+  }
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<!--Automatically bind the challenge to a button-->
+<!--V3 Automatically bind the challenge to a button-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,12 +18,9 @@
   </button>
 </form>
 <script>
-
   function onSubmit(token) {
-
     const inp = document.getElementById('inp')
-
-    fetch('http://localhost:3000/password_recovery', {
+    fetch('http://localhost:3001/password_recovery', {
         headers: {
           'Content-Type': 'application/Json'
         },
@@ -34,16 +31,9 @@
             email: inp.value,
             recaptchaToken: token
           })
-
       }
     )
   }
-
-
-</script>
-
-<script>
-  const btn = document.getElementsByTagName('button')[0]
 </script>
 
 </body>
