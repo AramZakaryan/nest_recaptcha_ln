@@ -1,5 +1,6 @@
 import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common'
 import { AppService } from './app.service'
+import * as process from 'node:process'
 
 @Controller()
 export class AppController {
@@ -37,7 +38,7 @@ const recaptchaAdapter = {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        secret: '6LfF304qAAAAAK1UT-DV1yXpLEMT1RPZSDZK16nf',
+        secret: process.env.RECAPTCHA_SECRET_V3,
         response: value,
       }),
     }).then((res) => res.json())
@@ -51,7 +52,7 @@ const recaptchaAdapter = {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        secret: '6LcrDE8qAAAAAIdoQRMq14NPG1hOqh1iIxvw3ggQ',
+        secret: process.env.RECAPTCHA_SECRET_V2,
         response: value,
       }),
     }).then((res) => res.json())
